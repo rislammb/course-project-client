@@ -1,37 +1,38 @@
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
+
+interface ThemeContextProps {
+  theme: string;
+  toggleTheme: () => void;
+}
 
 const defaultValue = {
-  theme: "light",
+  theme: "dark",
   toggleTheme: () => {},
 };
 
-export const ThemeContext = createContext(defaultValue);
+export const ThemeContext = createContext<ThemeContextProps>(defaultValue);
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<string>("light");
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [theme, setTheme] = useState<string>("dark");
 
   const toggleTheme = useCallback(() => {
-    const toggleTheme = theme === "light" ? "dark" : "light";
-    setTheme(toggleTheme);
-    window.localStorage.setItem("theme", toggleTheme);
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    window.localStorage.setItem("color-theme", newTheme);
   }, [theme]);
 
   useEffect(() => {
-    const localTheme = window.localStorage.getItem("theme");
-    if (localTheme) setTheme(localTheme);
+    const localTheme = window.localStorage.getItem("color-theme");
+    if (localTheme && localTheme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
   }, []);
 
   useEffect(() => {
     if (theme === "dark") {
-      document.documentElement.classList.add("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.removeAttribute("data-theme");
     }
   }, [theme]);
 
