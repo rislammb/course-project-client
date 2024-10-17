@@ -18,23 +18,20 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const toggleTheme = useCallback(() => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
+    document.body.setAttribute("data-bs-theme", newTheme);
     window.localStorage.setItem("color-theme", newTheme);
   }, [theme]);
 
   useEffect(() => {
     const localTheme = window.localStorage.getItem("color-theme");
-    if (localTheme && localTheme === "dark") {
-      document.documentElement.setAttribute("data-theme", "dark");
+    if (localTheme && localTheme === "light") {
+      setTheme("light");
+      document.body.setAttribute("data-bs-theme", "light");
+    } else {
+      setTheme("dark");
+      document.body.setAttribute("data-bs-theme", "dark");
     }
   }, []);
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.setAttribute("data-theme", "dark");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-    }
-  }, [theme]);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
