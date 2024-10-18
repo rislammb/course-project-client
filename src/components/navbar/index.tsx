@@ -1,14 +1,15 @@
-import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { CiLight, CiDark } from "react-icons/ci";
-// import { AuthContext } from "../../context/AuthContext";
-import { ThemeContext } from "../../context/ThemeContext";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { toggleThemeMode } from "../../store/theme-slice";
+import { logout } from "../../store/auth-slice";
 
 export default function Navabr() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  // const { username, logout } = useContext(AuthContext);
-  const username = "admin";
-  const logout = () => {};
+  const {
+    theme: { mode },
+    auth: { user },
+  } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
 
   return (
     <nav
@@ -29,25 +30,28 @@ export default function Navabr() {
           Home
         </NavLink>
         <div className="d-flex gap-2 align-items-center">
-          <button onClick={toggleTheme} className={"nav-link"}>
-            {theme === "light" ? <CiLight size={28} /> : <CiDark size={28} />}
+          <button
+            onClick={() => dispatch(toggleThemeMode())}
+            className={"nav-link"}
+          >
+            {mode === "light" ? <CiLight size={28} /> : <CiDark size={28} />}
           </button>
-          {username ? (
+          {user?.name ? (
             <div className="d-flex gap-2 align-items-center">
               <p className="d-flex align-items-center gap-1 text-white">
                 Welcome,{" "}
                 <NavLink
-                  to={`/user/${username}`}
+                  to={`/user/${user}`}
                   className={({ isActive }) =>
                     isActive ? "nav-link active" : "nav-link"
                   }
                 >
-                  {username}
+                  {user.name}
                 </NavLink>
               </p>
               <button
                 className="btn btn-outline-danger btn-sm"
-                onClick={logout}
+                onClick={() => logout()}
               >
                 Logout
               </button>

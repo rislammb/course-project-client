@@ -1,6 +1,9 @@
+p {
+  margin: 0;
+}
 .container-sm {
   max-width: 780px;
 }
-p {
-  margin: 0;
+.nav-link {
+  color: #ffffffe6;
 }
