@@ -4,6 +4,12 @@ p {
 .container-sm {
   max-width: 780px;
 }
-.nav-link {
+.navbar-nav .nav-link {
   color: #ffffffe6;
+}
+.btn:active {
+  border-color: transparent !important;
+}
+input:focus-visible {
+  outline: none !important;
 }

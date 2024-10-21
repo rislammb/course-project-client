@@ -3,16 +3,34 @@ import { FiPlusCircle } from "react-icons/fi";
 import { MdOutlinePhotoSizeSelectActual, MdTitle } from "react-icons/md";
 import { TbFileImport } from "react-icons/tb";
 import { RiYoutubeLine } from "react-icons/ri";
+import { useForm } from "react-hook-form";
 
 export default function Template() {
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      title: "Untitled form",
+      description: "Form description",
+    },
+  });
+  const onSubmit = () => {};
+
   return (
     <div className="my-3 d-flex gap-3 align-items-start">
       <div className="d-flex flex-column gap-3">
         <div className="card ">
-          <div className="card-body">
-            <h1>Untitled form</h1>
-            <p>Form description</p>
-          </div>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="card-body d-flex flex-column gap-2"
+          >
+            <input
+              {...register("title")}
+              className="border-0 border-bottom h1"
+            />
+            <input
+              {...register("description")}
+              className="border-0 border-bottom"
+            />
+          </form>
         </div>
         <div className="card ">
           <div className="card-body">
