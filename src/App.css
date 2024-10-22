@@ -10,6 +10,13 @@ p {
 .btn:active {
   border-color: transparent !important;
 }
-input:focus-visible {
+select:focus,
+input:focus,
+textarea:focus {
+  box-shadow: none !important;
+}
+input:focus-visible,
+textarea:focus-visible {
   outline: none !important;
+  border-bottom: 2px solid #004052 !important;
 }

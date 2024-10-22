@@ -1,116 +1,91 @@
-export default function TemplateForm() {
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
+import { useState } from "react";
+import { MdClear } from "react-icons/md";
+
+interface TemplateFormProps {
+  questionNumber: number;
+}
+
+export default function TemplateForm({ questionNumber }: TemplateFormProps) {
+  const [questionType, setQuestionType] = useState<string>("text");
+  const handleQuestionType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setQuestionType(event.target.value);
   };
+  // const handleSubmit = (e: React.SyntheticEvent) => {
+  //   e.preventDefault();
+  // };
+
+  const questionTypes = [
+    { label: "Short text", value: "text" },
+    { label: "Long text", value: "textarea" },
+    { label: "Number", value: "number" },
+    { label: "Checkbox", value: "checkbox" },
+  ];
 
   return (
-    <form
-      className="row g-3 needs-validation"
-      noValidate
-      onSubmit={handleSubmit}
+    <div
+      className="d-flex flex-column gap-3"
+      // name={`question-${questionNumber}`}
+      // onSubmit={handleSubmit}
     >
-      <div className="col-md-4">
-        <label htmlFor="validationCustom01" className="form-label">
-          First name
-        </label>
+      <div className="d-flex gap-3">
         <input
           type="text"
-          className="form-control"
-          id="validationCustom01"
-          value="Mark"
-          required
+          className="w-100 border-0 border-bottom"
+          defaultValue={"Untitled Question"}
         />
-        <div className="valid-feedback">Looks good!</div>
-      </div>
-      <div className="col-md-4">
-        <label htmlFor="validationCustom02" className="form-label">
-          Last name
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="validationCustom02"
-          value="Otto"
-          required
-        />
-        <div className="valid-feedback">Looks good!</div>
-      </div>
-      <div className="col-md-4">
-        <label htmlFor="validationCustomUsername" className="form-label">
-          Username
-        </label>
-        <div className="input-group has-validation">
-          <span className="input-group-text" id="inputGroupPrepend">
-            @
-          </span>
-          <input
-            type="text"
-            className="form-control"
-            id="validationCustomUsername"
-            aria-describedby="inputGroupPrepend"
-            required
-          />
-          <div className="invalid-feedback">Please choose a username.</div>
-        </div>
-      </div>
-      <div className="col-md-6">
-        <label htmlFor="validationCustom03" className="form-label">
-          City
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="validationCustom03"
-          required
-        />
-        <div className="invalid-feedback">Please provide a valid city.</div>
-      </div>
-      <div className="col-md-3">
-        <label htmlFor="validationCustom04" className="form-label">
-          State
-        </label>
-        <select className="form-select" id="validationCustom04" required>
-          <option selected disabled value="">
-            Choose...
-          </option>
-          <option>...</option>
+        <select
+          className="form-select w-auto"
+          value={questionType}
+          onChange={handleQuestionType}
+        >
+          {questionTypes.map((item) => (
+            <option key={item.value} value={item.value}>
+              {item.label}
+            </option>
+          ))}
         </select>
-        <div className="invalid-feedback">Please select a valid state.</div>
       </div>
-      <div className="col-md-3">
-        <label htmlFor="validationCustom05" className="form-label">
-          Zip
-        </label>
+      {questionType === "checkbox" ? (
+        <>
+          <div className="d-flex gap-2 justify-content-between align-items-center">
+            <div>
+              <input type="checkbox" className="form-check-input" disabled />{" "}
+              <input
+                defaultValue={"Option 1"}
+                className="border-0 border-bottom"
+              />
+            </div>
+            <MdClear />
+          </div>
+          <div>
+            <input type="checkbox" className="form-check-input" disabled />{" "}
+            <input
+              defaultValue={"Add option"}
+              className="border-0 border-bottom"
+            />{" "}
+            or <button className="btn btn-primary">add "Other"</button>
+          </div>
+        </>
+      ) : (
         <input
           type="text"
-          className="form-control"
-          id="validationCustom05"
-          required
+          className={`border-0 border-bottom ${
+            questionType === "textarea"
+              ? "w-100"
+              : questionType === "number"
+              ? "w-25"
+              : "w-50"
+          }`}
+          placeholder={
+            questionType === "textarea"
+              ? "Long answer text"
+              : questionType === "number"
+              ? "Number"
+              : "Short answer text"
+          }
+          disabled
         />
-        <div className="invalid-feedback">Please provide a valid zip.</div>
-      </div>
-      <div className="col-12">
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="invalidCheck"
-            required
-          />
-          <label className="form-check-label" htmlFor="invalidCheck">
-            Agree to terms and conditions
-          </label>
-          <div className="invalid-feedback">
-            You must agree before submitting.
-          </div>
-        </div>
-      </div>
-      <div className="col-12">
-        <button className="btn btn-primary" type="submit">
-          Submit form
-        </button>
-      </div>
-    </form>
+      )}
+    </div>
   );
 }

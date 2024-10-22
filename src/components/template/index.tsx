@@ -4,8 +4,14 @@ import { MdOutlinePhotoSizeSelectActual, MdTitle } from "react-icons/md";
 import { TbFileImport } from "react-icons/tb";
 import { RiYoutubeLine } from "react-icons/ri";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 export default function Template() {
+  const [questionNumbers, setQuestionNumbers] = useState<number[]>([1]);
+  const incrementQuestionNumber = () => {
+    setQuestionNumbers((prev) => [...prev, prev.length + 1]);
+  };
+
   const { register, handleSubmit } = useForm({
     defaultValues: {
       title: "Untitled form",
@@ -16,38 +22,34 @@ export default function Template() {
 
   return (
     <div className="my-3 d-flex gap-3 align-items-start">
-      <div className="d-flex flex-column gap-3">
-        <div className="card ">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="card-body d-flex flex-column gap-2"
-          >
-            <input
-              {...register("title")}
-              className="border-0 border-bottom h1"
-            />
-            <input
-              {...register("description")}
-              className="border-0 border-bottom"
-            />
-          </form>
-        </div>
-        <div className="card ">
-          <div className="card-body">
-            <TemplateForm />
+      <form onSubmit={handleSubmit(onSubmit)} className="w-100">
+        <div className="d-flex flex-column gap-3">
+          <div className="card">
+            <div className="card-body d-flex flex-column gap-2">
+              <input
+                {...register("title")}
+                className="border-0 border-bottom h1"
+              />
+              <input
+                {...register("description")}
+                className="border-0 border-bottom"
+              />
+            </div>
           </div>
+          {questionNumbers.map((questionNumber) => (
+            <div className="card " key={questionNumber}>
+              <div className="card-body">
+                <TemplateForm questionNumber={questionNumber} />
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="card ">
-          <div className="card-body">
-            <TemplateForm />
-          </div>
-        </div>
-      </div>
+      </form>
 
       <div>
         <div className="card">
           <div className="card-body d-flex flex-column gap-3">
-            <button className="btn p-0">
+            <button className="btn p-0" onClick={incrementQuestionNumber}>
               <FiPlusCircle size={24} title="Add question" />
             </button>
             <button className="btn p-0">
