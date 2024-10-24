@@ -3,12 +3,16 @@ import { CiLight, CiDark } from "react-icons/ci";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { toggleThemeMode } from "../../store/theme-slice";
 import { logout } from "../../store/auth-slice";
+import { useTranslation } from "react-i18next";
+
+const languages = ["EN", "BN", "ES"];
 
 export default function Navabr() {
   const {
     theme: { mode },
     auth: { user },
   } = useAppSelector((state) => state);
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
 
   return (
@@ -27,9 +31,20 @@ export default function Navabr() {
             isActive ? "nav-link active" : "nav-link"
           }
         >
-          Home
+          {t("home")}
         </NavLink>
         <div className="d-flex gap-2 align-items-center">
+          {languages.map((lan) => (
+            <button
+              key={lan}
+              data-bs-theme="dark"
+              className="btn btn-sm"
+              onClick={() => i18n.changeLanguage(lan)}
+              disabled={i18n.resolvedLanguage === lan}
+            >
+              {lan}
+            </button>
+          ))}
           <button
             onClick={() => dispatch(toggleThemeMode())}
             className={"nav-link"}
@@ -39,7 +54,7 @@ export default function Navabr() {
           {user?.email ? (
             <div className="d-flex gap-2 align-items-center">
               <p className="d-flex align-items-center gap-1 text-white">
-                Welcome,{" "}
+                {t("welcome")},
                 <NavLink
                   to={`/user/${user.id}`}
                   className={({ isActive }) =>
@@ -53,7 +68,7 @@ export default function Navabr() {
                 className="btn btn-outline-danger btn-sm"
                 onClick={() => dispatch(logout())}
               >
-                Logout
+                {t("logout")}
               </button>
             </div>
           ) : (
@@ -64,7 +79,7 @@ export default function Navabr() {
                   isActive ? "nav-link active" : "nav-link"
                 }
               >
-                Login
+                {t("login")}
               </NavLink>
               <NavLink
                 to={"/register"}
@@ -72,7 +87,7 @@ export default function Navabr() {
                   isActive ? "nav-link active" : "nav-link"
                 }
               >
-                Register
+                {t("register")}
               </NavLink>
             </>
           )}

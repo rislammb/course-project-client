@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import Template from "../../components/template";
 
 export default function Home() {
+  const { t } = useTranslation();
   return (
     <main className="container container-sm">
       <ul className="nav nav-tabs" id="myTab" role="tablist">
@@ -15,7 +17,7 @@ export default function Home() {
             aria-controls="questions-tab-pane"
             aria-selected="true"
           >
-            Questions
+            {t("questions")}
           </button>
         </li>
         <li className="nav-item" role="presentation">
@@ -29,21 +31,7 @@ export default function Home() {
             aria-controls="response-tab-pane"
             aria-selected="false"
           >
-            Response
-          </button>
-        </li>
-        <li className="nav-item" role="presentation">
-          <button
-            className="nav-link"
-            id="settings-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#settings-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="settings-tab-pane"
-            aria-selected="false"
-          >
-            Settings
+            {t("response")}
           </button>
         </li>
       </ul>
@@ -64,7 +52,7 @@ export default function Home() {
           aria-labelledby="response-tab"
           tabIndex={0}
         >
-          Response
+          {t("response")}
         </div>
         <div
           className="tab-pane fade"

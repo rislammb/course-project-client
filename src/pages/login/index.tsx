@@ -6,6 +6,7 @@ import { setAuthUser } from "../../store/auth-slice";
 import { useAppDispatch } from "../../hooks";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -20,6 +21,7 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInput>({ resolver: zodResolver(loginSchema) });
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -44,11 +46,11 @@ export default function Login() {
 
   return (
     <main className="container mt-4" style={{ maxWidth: "410px" }}>
-      <h1 className="text-center mb-4">Login</h1>
+      <h1 className="text-center mb-4">{t("login")}</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
-            Email address
+            {t("email")}
           </label>
           <input
             {...register("email")}
@@ -67,7 +69,7 @@ export default function Login() {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
-            Password
+            {t("password")}
           </label>
           <input
             {...register("password")}
@@ -87,7 +89,7 @@ export default function Login() {
           {error && <p className="small text-danger">{error}</p>}
         </div>
         <button type="submit" className="btn btn-primary" disabled={submitting}>
-          Login
+          {t("login")}
           {submitting && <span className="submittig" />}
         </button>
       </form>

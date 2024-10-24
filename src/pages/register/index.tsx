@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createAccount } from "../../services/authService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const registerSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -18,6 +19,7 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormInput>({ resolver: zodResolver(registerSchema) });
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -40,11 +42,11 @@ export default function Register() {
 
   return (
     <main className="container mt-4" style={{ maxWidth: "410px" }}>
-      <h1 className="text-center mb-4">Register</h1>
+      <h1 className="text-center mb-4">{t("register")}</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
-            Email address
+            {t("email")}
           </label>
           <input
             {...register("email")}
@@ -63,7 +65,7 @@ export default function Register() {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
-            Password
+            {t("password")}
           </label>
           <input
             {...register("password")}
@@ -83,7 +85,7 @@ export default function Register() {
           {error && <p className="small text-danger">{error}</p>}
         </div>
         <button type="submit" className="btn btn-primary" disabled={submitting}>
-          Register
+          {t("register")}
           {submitting && <span className="submittig" />}
         </button>
       </form>
