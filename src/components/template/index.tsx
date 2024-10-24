@@ -12,13 +12,16 @@ export default function Template() {
     setQuestionNumbers((prev) => [...prev, prev.length + 1]);
   };
 
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      title: "Untitled form",
-      description: "Form description",
-    },
-  });
-  const onSubmit = () => {};
+  const { register, handleSubmit } = useForm();
+  // const { register, handleSubmit } = useForm({
+  //   defaultValues: {
+  //     title: "Untitled form",
+  //     description: "Form description",
+  //   },
+  // });
+  const onSubmit = (values: any) => {
+    console.log("values => ", values);
+  };
 
   return (
     <div className="my-3 d-flex gap-3 align-items-start">
@@ -29,21 +32,27 @@ export default function Template() {
               <input
                 {...register("title")}
                 className="border-0 border-bottom h1"
+                defaultValue={"Untitled form"}
               />
               <input
                 {...register("description")}
                 className="border-0 border-bottom"
+                defaultValue={"Form description"}
               />
             </div>
           </div>
           {questionNumbers.map((questionNumber) => (
-            <div className="card " key={questionNumber}>
+            <div className="card" key={questionNumber}>
               <div className="card-body">
-                <TemplateForm questionNumber={questionNumber} />
+                <TemplateForm
+                  questionNumber={questionNumber}
+                  register={register}
+                />
               </div>
             </div>
           ))}
         </div>
+        <button type="submit">Save</button>
       </form>
 
       <div>

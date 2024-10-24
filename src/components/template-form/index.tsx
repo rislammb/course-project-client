@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { MdClear } from "react-icons/md";
+import CheckboxType from "../checkbox-type";
 
 interface TemplateFormProps {
   questionNumber: number;
+  register: any
 }
 
-export default function TemplateForm({ questionNumber }: TemplateFormProps) {
-  const [questionType, setQuestionType] = useState<string>("text");
+export default function TemplateForm({ questionNumber, register }: TemplateFormProps) {
+  const [questionType, setQuestionType] = useState<string>("input");
   const handleQuestionType = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setQuestionType(event.target.value);
   };
@@ -15,7 +16,7 @@ export default function TemplateForm({ questionNumber }: TemplateFormProps) {
   // };
 
   const questionTypes = [
-    { label: "Short text", value: "text" },
+    { label: "Short text", value: "input" },
     { label: "Long text", value: "textarea" },
     { label: "Number", value: "number" },
     { label: "Checkbox", value: "checkbox" },
@@ -24,17 +25,19 @@ export default function TemplateForm({ questionNumber }: TemplateFormProps) {
   return (
     <div
       className="d-flex flex-column gap-3"
-      // name={`question-${questionNumber}`}
-      // onSubmit={handleSubmit}
+    // onSubmit={handleSubmit}
     >
       <div className="d-flex gap-3">
         <input
+          {...register(`question-${questionNumber}`)}
           type="text"
           className="w-100 border-0 border-bottom"
           defaultValue={"Untitled Question"}
         />
         <select
+          {...register(`question-${questionNumber}-type`)}
           className="form-select w-auto"
+          role="button"
           value={questionType}
           onChange={handleQuestionType}
         >
@@ -46,42 +49,22 @@ export default function TemplateForm({ questionNumber }: TemplateFormProps) {
         </select>
       </div>
       {questionType === "checkbox" ? (
-        <>
-          <div className="d-flex gap-2 justify-content-between align-items-center">
-            <div>
-              <input type="checkbox" className="form-check-input" disabled />{" "}
-              <input
-                defaultValue={"Option 1"}
-                className="border-0 border-bottom"
-              />
-            </div>
-            <MdClear />
-          </div>
-          <div>
-            <input type="checkbox" className="form-check-input" disabled />{" "}
-            <input
-              defaultValue={"Add option"}
-              className="border-0 border-bottom"
-            />{" "}
-            or <button className="btn btn-primary">add "Other"</button>
-          </div>
-        </>
+        <CheckboxType questionNumber={questionNumber} register={register} />
       ) : (
         <input
           type="text"
-          className={`border-0 border-bottom ${
-            questionType === "textarea"
-              ? "w-100"
-              : questionType === "number"
+          className={`border-0 border-bottom ${questionType === "textarea"
+            ? "w-100"
+            : questionType === "number"
               ? "w-25"
               : "w-50"
-          }`}
+            }`}
           placeholder={
             questionType === "textarea"
               ? "Long answer text"
               : questionType === "number"
-              ? "Number"
-              : "Short answer text"
+                ? "Number"
+                : "Short answer text"
           }
           disabled
         />
