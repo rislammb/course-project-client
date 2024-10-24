@@ -2,12 +2,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAccount } from "../../services/authService";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = z.object({
-  name: z.string().min(2),
   email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(6),
-  confirmPassword: z.string().min(6),
 });
 
 export type RegisterFormInput = z.infer<typeof registerSchema>;
@@ -18,12 +18,23 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormInput>({ resolver: zodResolver(registerSchema) });
+  const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
   const onSubmit: SubmitHandler<RegisterFormInput> = async (data) => {
+    setSubmitting(true);
+    setError("");
     try {
-      const d = await createAccount(data);
-      console.log("Create account success => ", d);
-    } catch (err) {
+      await createAccount(data);
+      return navigate("/login");
+    } catch (err: any) {
       console.log("Error from create account => ", err);
+      setError(
+        err.response?.data?.error ?? err?.message ?? "Something went wrong!"
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -31,25 +42,6 @@ export default function Register() {
     <main className="container mt-4" style={{ maxWidth: "410px" }}>
       <h1 className="text-center mb-4">Register</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name
-          </label>
-          <input
-            {...register("name")}
-            id="name"
-            placeholder="Name..."
-            aria-describedby="nameError"
-            className={`form-control ${
-              errors.name?.message ? "is-invalid" : ""
-            }`}
-          />
-          {errors.name?.message && (
-            <small id="nameError" className="text-danger">
-              {errors.name?.message}
-            </small>
-          )}
-        </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email address
@@ -88,29 +80,11 @@ export default function Register() {
               {errors.password?.message}
             </small>
           )}
+          {error && <p className="small text-danger">{error}</p>}
         </div>
-        <div className="mb-3">
-          <label htmlFor="confirmPassword" className="form-label">
-            Confirm Password
-          </label>
-          <input
-            {...register("confirmPassword")}
-            id="confirmPassword"
-            type="confirmPassword"
-            placeholder="Password..."
-            aria-describedby="confirmPasswordError"
-            className={`form-control ${
-              errors.confirmPassword?.message ? "is-invalid" : ""
-            }`}
-          />
-          {errors.confirmPassword?.message && (
-            <small id="confirmPasswordError" className="text-danger">
-              {errors.confirmPassword?.message}
-            </small>
-          )}
-        </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
           Register
+          {submitting && <span className="submittig" />}
         </button>
       </form>
     </main>

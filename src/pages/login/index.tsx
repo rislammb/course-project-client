@@ -1,9 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { login } from "../../services/authService";
+import { userLogin } from "../../services/authService";
 import { setAuthUser } from "../../store/auth-slice";
 import { useAppDispatch } from "../../hooks";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -18,19 +20,25 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInput>({ resolver: zodResolver(loginSchema) });
+  const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
+    setSubmitting(true);
+    setError("");
     try {
-      await login(data);
-      const user = {
-        name: "Test",
-        email: "test@email.com",
-        token: "d834u7r7x346cr4c7747c45y7c5454n74ncj47n",
-      };
-      dispatch(setAuthUser(user));
-    } catch (err) {
+      const res = await userLogin(data);
+      dispatch(setAuthUser(res.data));
+      return navigate("/");
+    } catch (err: any) {
       console.log("Error from login => ", err);
+      setError(
+        err.response?.data?.error ?? err?.message ?? "Something went wrong!"
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -38,7 +46,7 @@ export default function Login() {
     <main className="container mt-4" style={{ maxWidth: "410px" }}>
       <h1 className="text-center mb-4">Login</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
+        <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email address
           </label>
@@ -57,7 +65,7 @@ export default function Login() {
             </small>
           )}
         </div>
-        <div className="mb-4">
+        <div className="mb-3">
           <label htmlFor="password" className="form-label">
             Password
           </label>
@@ -76,9 +84,11 @@ export default function Login() {
               {errors.password?.message}
             </small>
           )}
+          {error && <p className="small text-danger">{error}</p>}
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
           Login
+          {submitting && <span className="submittig" />}
         </button>
       </form>
     </main>

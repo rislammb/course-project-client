@@ -36,22 +36,22 @@ export default function Navabr() {
           >
             {mode === "light" ? <CiLight size={28} /> : <CiDark size={28} />}
           </button>
-          {user?.name ? (
+          {user?.email ? (
             <div className="d-flex gap-2 align-items-center">
               <p className="d-flex align-items-center gap-1 text-white">
                 Welcome,{" "}
                 <NavLink
-                  to={`/user/${user}`}
+                  to={`/user/${user.id}`}
                   className={({ isActive }) =>
                     isActive ? "nav-link active" : "nav-link"
                   }
                 >
-                  {user.name}
+                  {user.email?.split("@")[0]}
                 </NavLink>
               </p>
               <button
                 className="btn btn-outline-danger btn-sm"
-                onClick={() => logout()}
+                onClick={() => dispatch(logout())}
               >
                 Logout
               </button>

@@ -14,12 +14,10 @@ export default function CheckboxType({
   const [isOther, setIsOther] = useState<boolean>(false);
 
   const addOption = () => {
-    const newOpt = [...optionLength, optionLength.length + 1];
-    setOptionLength(newOpt);
+    setOptionLength([...optionLength, optionLength.length + 1]);
   };
   const deleteOption = (opt: number | string) => {
-    const newOpt = optionLength.filter((option) => option !== opt);
-    setOptionLength(newOpt);
+    setOptionLength(optionLength.filter((option) => option !== opt));
   };
   const toggleOther = () => setIsOther(!isOther);
 
@@ -55,20 +53,26 @@ export default function CheckboxType({
         </div>
       )}
 
-      <div className="d-flex align-items-center">
-        <input type="checkbox" className="form-check-input" disabled />
-        <button className="btn btn-sm" onClick={addOption}>
-          Add option
-        </button>
-        {!isOther && (
-          <>
-            or
-            <button className="btn btn-sm text-primary" onClick={toggleOther}>
-              add "Other"
-            </button>
-          </>
-        )}
-      </div>
+      {(isOther ? optionLength.length < 3 : optionLength.length < 4) && (
+        <div className="d-flex align-items-center">
+          <input type="checkbox" className="form-check-input" disabled />
+          <button type="button" className="btn btn-sm" onClick={addOption}>
+            Add option
+          </button>
+          {!isOther && (
+            <>
+              or
+              <button
+                type="button"
+                className="btn btn-sm text-primary"
+                onClick={toggleOther}
+              >
+                add "Other"
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 }

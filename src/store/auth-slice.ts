@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./index";
+import { removeToken, setToken } from "../utils/storage";
 
 export interface AuthUser {
-  name: string;
+  id: number;
   email: string;
   token?: string;
 }
@@ -20,9 +21,11 @@ const authSlice = createSlice({
   reducers: {
     setAuthUser: (state, action: PayloadAction<AuthUser>) => {
       state.user = action.payload;
+      if (action.payload.token) setToken(action.payload.token);
     },
     logout: (state) => {
       state.user = null;
+      removeToken();
     },
   },
 });

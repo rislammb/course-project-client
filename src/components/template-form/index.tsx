@@ -3,17 +3,17 @@ import CheckboxType from "../checkbox-type";
 
 interface TemplateFormProps {
   questionNumber: number;
-  register: any
+  register: any;
 }
 
-export default function TemplateForm({ questionNumber, register }: TemplateFormProps) {
+export default function TemplateForm({
+  questionNumber,
+  register,
+}: TemplateFormProps) {
   const [questionType, setQuestionType] = useState<string>("input");
   const handleQuestionType = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setQuestionType(event.target.value);
   };
-  // const handleSubmit = (e: React.SyntheticEvent) => {
-  //   e.preventDefault();
-  // };
 
   const questionTypes = [
     { label: "Short text", value: "input" },
@@ -23,10 +23,7 @@ export default function TemplateForm({ questionNumber, register }: TemplateFormP
   ];
 
   return (
-    <div
-      className="d-flex flex-column gap-3"
-    // onSubmit={handleSubmit}
-    >
+    <div className="d-flex flex-column gap-3">
       <div className="d-flex gap-3">
         <input
           {...register(`question-${questionNumber}`)}
@@ -53,18 +50,19 @@ export default function TemplateForm({ questionNumber, register }: TemplateFormP
       ) : (
         <input
           type="text"
-          className={`border-0 border-bottom ${questionType === "textarea"
-            ? "w-100"
-            : questionType === "number"
+          className={`border-0 border-bottom ${
+            questionType === "textarea"
+              ? "w-100"
+              : questionType === "number"
               ? "w-25"
               : "w-50"
-            }`}
+          }`}
           placeholder={
             questionType === "textarea"
               ? "Long answer text"
               : questionType === "number"
-                ? "Number"
-                : "Short answer text"
+              ? "Number"
+              : "Short answer text"
           }
           disabled
         />

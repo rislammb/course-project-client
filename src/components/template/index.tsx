@@ -1,8 +1,6 @@
 import TemplateForm from "../template-form";
 import { FiPlusCircle } from "react-icons/fi";
-import { MdOutlinePhotoSizeSelectActual, MdTitle } from "react-icons/md";
-import { TbFileImport } from "react-icons/tb";
-import { RiYoutubeLine } from "react-icons/ri";
+import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -13,12 +11,6 @@ export default function Template() {
   };
 
   const { register, handleSubmit } = useForm();
-  // const { register, handleSubmit } = useForm({
-  //   defaultValues: {
-  //     title: "Untitled form",
-  //     description: "Form description",
-  //   },
-  // });
   const onSubmit = (values: any) => {
     console.log("values => ", values);
   };
@@ -52,7 +44,6 @@ export default function Template() {
             </div>
           ))}
         </div>
-        <button type="submit">Save</button>
       </form>
 
       <div>
@@ -62,16 +53,7 @@ export default function Template() {
               <FiPlusCircle size={24} title="Add question" />
             </button>
             <button className="btn p-0">
-              <TbFileImport size={24} title="Import questions" />
-            </button>
-            <button className="btn p-0">
-              <MdTitle size={26} title="Add title and description" />
-            </button>
-            <button className="btn p-0">
               <MdOutlinePhotoSizeSelectActual size={22} title="Add image" />
-            </button>
-            <button className="btn p-0">
-              <RiYoutubeLine size={26} title="Add video" />
             </button>
           </div>
         </div>
