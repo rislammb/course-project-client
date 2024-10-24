@@ -3,7 +3,7 @@ import { initReactI18next } from "react-i18next";
 
 i18next.use(initReactI18next).init({
   debug: true,
-  fallbackLng: "en",
+  fallbackLng: "EN",
   resources: {
     EN: {
       translation: {
