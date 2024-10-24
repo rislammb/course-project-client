@@ -11,6 +11,7 @@ import { OpenRoute } from "./components/route-controller";
 import { getToken } from "./utils/storage";
 import { setAuthUser } from "./store/auth-slice";
 import { getLoggedUser } from "./services/authService";
+import MainLoading from "./components/main-loading";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -43,7 +44,7 @@ function App() {
   }, []);
 
   return loading ? (
-    <p>Loading...</p>
+    <MainLoading />
   ) : (
     <BrowserRouter>
       <Navabr />
