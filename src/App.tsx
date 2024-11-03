@@ -6,12 +6,13 @@ import Navabr from "./components/navbar";
 import Home from "./pages/home";
 import Register from "./pages/register";
 import Login from "./pages/login";
-import "./App.css";
+import UserDetails from "./pages/user-details";
+import MainLoading from "./components/main-loading";
 import { OpenRoute } from "./components/route-controller";
 import { getToken } from "./utils/storage";
 import { setAuthUser } from "./store/auth-slice";
 import { getLoggedUser } from "./services/authService";
-import MainLoading from "./components/main-loading";
+import "./App.css";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -51,6 +52,7 @@ function App() {
       <Routes>
         <Route path="/register" element={<OpenRoute component={Register} />} />
         <Route path="/login" element={<OpenRoute component={Login} />} />
+        <Route path="/user/:userId" element={<UserDetails />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
